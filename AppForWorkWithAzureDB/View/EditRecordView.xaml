@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="AppForWorkWithAzureDB.View.EditRecordView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AppForWorkWithAzureDB.View"
+             mc:Ignorable="d" >
+    <Grid Uid="LoginGrid" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Background="LightGray">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="100" Width="2*"/>
+            <ColumnDefinition MinWidth="150" Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <Label x:Name="labelTitle" Content="{Binding Title}" Grid.ColumnSpan="2" HorizontalAlignment="Center" Grid.Row="1" FontSize="20" />
+
+        <!--<Label Content="Dose:" Grid.Column="0" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center"/>
+        <TextBox x:Name="doseTextBox" Text="{Binding CurrentRecord.Dose, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="2"  Grid.Column="1" Height="30"/>
+
+        <Label VerticalAlignment="Center" Grid.Row="3"  HorizontalAlignment="Left" Grid.Column="0" Content="Operator:" Height="26" Width="61"/>
+        <TextBox x:Name="operatorTextBox" VerticalAlignment="Center" Text="{Binding CurrentRecord.Operator, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="3" Height="24" Grid.Column="1"/>
+        
+        <Label VerticalAlignment="Center" Grid.Row="4"  HorizontalAlignment="Left" Grid.Column="0" Content="Serial Number:" Height="26" />
+        <TextBox x:Name="serialNumberTextBox"  VerticalAlignment="Center" Text="{Binding CurrentRecord.SerialNumber, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="4"  Height="24" Grid.Column="1"/>
+        
+        <Label VerticalAlignment="Center" Grid.Row="5" HorizontalAlignment="Left" Grid.Column="0" Content="Time:" Height="26" Width="38"/>
+        <DatePicker x:Name="timeDatePicker" VerticalAlignment="Center" SelectedDate="{Binding CurrentRecord.Time, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="5"  HorizontalAlignment="Left" Grid.Column="1" Height="24" Width="120"/>-->
+
+        <Label x:Name="label1" Content="Dose:" Grid.Column="0" HorizontalAlignment="Left" Grid.Row="2"/>
+        <TextBox Text="{Binding Path=CurrentRecord.Dose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="2" Height="30"/>
+
+        <Label x:Name="label2" Content="Time:" Grid.Column="0" HorizontalAlignment="Left" Grid.Row="3" />
+        <!--<TextBox Text="{Binding Path=CurrentRecord.Time, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="3" Height="30"/>-->
+        <DatePicker x:Name="timeDatePicker" VerticalAlignment="Center" SelectedDate="{Binding Path=CurrentRecord.Time, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3"  HorizontalAlignment="Left" Grid.Column="1" Height="24" Width="140"/>
+
+        <Label Content="Operator:" Grid.Row="4" Grid.Column="0" />
+        <TextBox Text="{Binding Path=CurrentRecord.Operator, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="4" Height="30"/>
+        
+        <Label Content="SerialNumber:" Grid.Row="5" Grid.Column="0" />
+        <TextBox Text="{Binding Path=CurrentRecord.SerialNumber, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="5" Height="30"/>
+
+        <StackPanel HorizontalAlignment="Center"  Grid.Row="6" Grid.Column="1" Orientation="Horizontal" >
+            <Button x:Name="cancelButton" Content="Отмена" Height="30"
+                    Command="{Binding CancelCommand}"/>
+            <Button x:Name="applyButton" Content="Принять" Height="30"
+                    Command="{Binding ApplyCommand}" CommandParameter="{Binding CurrentRecord}"/>
+        </StackPanel>
+
+
+    </Grid>
+</UserControl>
