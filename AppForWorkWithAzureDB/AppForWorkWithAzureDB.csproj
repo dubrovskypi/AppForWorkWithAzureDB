@@ -85,6 +85,24 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>NewAzureEDM.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Model\TestRecord.cs">
+      <DependentUpon>TestRecordsEDM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\TestRecordsEDM.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestRecordsEDM.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\TestRecordsEDM.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestRecordsEDM.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\TestRecordsEDM.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestRecordsEDM.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Model\TestTable.cs">
       <DependentUpon>NewAzureEDM.tt</DependentUpon>
     </Compile>
@@ -158,6 +176,13 @@
     <None Include="Model\NewAzureEDM.edmx.diagram">
       <DependentUpon>NewAzureEDM.edmx</DependentUpon>
     </None>
+    <EntityDeploy Include="Model\TestRecordsEDM.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>TestRecordsEDM.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Model\TestRecordsEDM.edmx.diagram">
+      <DependentUpon>TestRecordsEDM.edmx</DependentUpon>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\Model.TestTable.datasource" />
     <None Include="Properties\Settings.settings">
@@ -184,6 +209,16 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>NewAzureEDM.edmx</DependentUpon>
       <LastGenOutput>NewAzureEDM.cs</LastGenOutput>
+    </Content>
+    <Content Include="Model\TestRecordsEDM.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TestRecordsEDM.edmx</DependentUpon>
+      <LastGenOutput>TestRecordsEDM.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Model\TestRecordsEDM.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TestRecordsEDM.edmx</DependentUpon>
+      <LastGenOutput>TestRecordsEDM.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -27,6 +27,8 @@
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel HorizontalAlignment="Center"  Grid.Row="1" Orientation="Horizontal" >
+            <Button x:Name="StartTimerButton" Content="Старт" Height="30" Margin="10,0"
+                    Command="{Binding StartTimerCommand}"/>
             <Button x:Name="updateButton" Content="Обновить" Height="30"
                     Command="{Binding UpdateCommand}"/>
             <Button x:Name="deleteButton" Content="Удалить" Height="30"

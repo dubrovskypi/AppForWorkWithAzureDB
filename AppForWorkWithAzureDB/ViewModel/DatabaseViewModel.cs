@@ -11,6 +11,8 @@ using System.Windows;
 using System.Configuration;
 using System.Data.Entity.Core.EntityClient;
 using System.Data.Common;
+using System.Timers;
+using System.Windows.Threading;
 
 namespace AppForWorkWithAzureDB.ViewModel
 {
@@ -20,6 +22,9 @@ namespace AppForWorkWithAzureDB.ViewModel
         public TestDBEntities DB;
         //private BindingList<Record> recordsList;
         //private Record selectedRecord;
+
+        private Timer _timerToAdd;
+        //private BackgroundWorker _worker = new BackgroundWorker();
 
         private BindingList<TestTable> recordsList;
         private TestTable selectedRecord;
@@ -105,7 +110,7 @@ namespace AppForWorkWithAzureDB.ViewModel
                     (updateCommand = new DelegateCommand(() =>
                     {
                         LoadRecords();
-
+                        //_worker.RunWorkerAsync();
                         if (editRecordVM != null)
                         {
                             editRecordVM.Dispose();
@@ -125,6 +130,7 @@ namespace AppForWorkWithAzureDB.ViewModel
                 return deleteCommand ??
                   (deleteCommand = new RelayCommand(obj =>
                   {
+                      //вариант1
                       //var RecordForDelete = obj as Record;
                       //if (RecordForDelete == null) return;
                       //DB.Records.Remove(RecordForDelete);
@@ -134,8 +140,6 @@ namespace AppForWorkWithAzureDB.ViewModel
                           var RecordForDelete = obj as TestTable;
                           //var RecordForDelete = obj as RecordModel;
                           if (RecordForDelete == null) return;
-
-                          //TODO 
                           DB.TestTables.Remove(RecordForDelete);
                           DB.SaveChanges();
                       }
@@ -170,6 +174,7 @@ namespace AppForWorkWithAzureDB.ViewModel
                 return editRecordCommand ??
                     (editRecordCommand = new RelayCommand(obj =>
                     {
+                        //вариант1
                         //var recordForEdit = obj as Record;
                         //if (recordForEdit == null) return;
                         //EditRecordVM = new EditRecordViewModel(this, "Edit record", recordForEdit);
@@ -182,16 +187,100 @@ namespace AppForWorkWithAzureDB.ViewModel
                     obj => obj != null));
             }
         }
+
+        private DelegateCommand startTimerCommand;
+        public DelegateCommand StartTimerCommand
+        {
+            get
+            {
+                return startTimerCommand ??
+                    (startTimerCommand = new DelegateCommand(() =>
+                    {
+                        if (_timerToAdd != null)
+                        {
+                            if (_timerToAdd.Enabled) _timerToAdd.Stop();
+                            else _timerToAdd.Start();
+                        }
+
+                    }));
+            }
+        }
         #endregion
 
         public DatabaseViewModel(BaseViewModel parent, string title = null):base (parent, title)
         {
             LoadRecords();
+            
+            _timerToAdd = new Timer(10000) { AutoReset = true };
+            _timerToAdd.Elapsed += delegate
+            {
+                try
+                {
+                    var record = new TestTable
+                    {
+                        ID = Guid.NewGuid().ToString(),
+                        Dose = 99,
+                        Operator = "operator",
+                        SerialNumber = "serial",
+                        Time = DateTime.Now
+                    };
+                    using (var context = new TestDBEntities("name=TestDBEntities"))
+                    {
+                        context.TestTables.Add(record);
+                        context.SaveChanges();
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+            };
+            //_timerToAdd.Start();
+
+            //_worker.DoWork += _WorkerDoWork;
+            //_worker.RunWorkerCompleted += _WorkerRunWorkerCompleted;
+            //_worker.RunWorkerAsync();
         }
+
+        //private void _WorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        //{
+        //    //throw new NotImplementedException();
+        //}
+
+        //private void _WorkerDoWork(object sender, DoWorkEventArgs e)
+        //{
+        //    Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Normal, new Action (() => 
+        //    {
+        //        try
+        //        {
+        //            var record = new TestTable
+        //            {
+        //                ID = Guid.NewGuid().ToString(),
+        //                Dose = 99,
+        //                Operator = "operator",
+        //                SerialNumber = "serial",
+        //                Time = DateTime.Now
+        //            };
+        //            DB.TestTables.Add(record);
+        //            DB.SaveChanges();
+        //        }
+        //        catch (Exception ex)
+        //        {
+
+        //            throw;
+        //        }
+        //    }
+        //    ));
+        //}
 
         public override void Dispose()
         {
             if (DB != null) DB.Dispose();
+
+            _timerToAdd.Stop();
+            _timerToAdd.Dispose();
+
             if (EditRecordVM != null) EditRecordVM.Dispose();
             EditRecordVM = null;
             RecordsList = null;
@@ -202,6 +291,7 @@ namespace AppForWorkWithAzureDB.ViewModel
         {
             if (DB != null) DB.Dispose();
 
+            //вариант1
             //DB = new DBFORAZUREEntities();
             //DB.Records.Load();
             //RecordsList = DB.Records.Local.ToBindingList();
@@ -226,39 +316,15 @@ namespace AppForWorkWithAzureDB.ViewModel
                 DB.TestTables.Load();
                 RecordsList = DB.TestTables.Local.ToBindingList();
                 if (RecordsList.Count > 0) SelectedRecord = RecordsList.First();
-
-
-                ////DB = new TestDBEntities();
-
-                ////TODO
-                //RecordsList = new BindingList<RecordModel>();
-
-                //using (var context = new TestDBEntities())
-                //{
-                //    context.TestTables.Load();
-                //    var newRecords = context.TestTables.Local.ToBindingList();
-                //    foreach (var record in newRecords)
-                //    {
-                //        var newitem = new RecordModel
-                //        {
-                //            ID = record.ID,
-                //            Dose = record.Dose,
-                //            Time = record.Time,
-                //            Operator = record.Operator,
-                //            SerialNumber = record.SerialNumber
-                //        };
-                //        RecordsList.Add(newitem);
-                //    }
-                //}
-                //if (RecordsList.Count > 0) SelectedRecord = RecordsList.First();
-                ////DB.TestTables.Load();
-                ////RecordsList = DB.TestTables.Local.ToBindingList();
-                ////if (RecordsList.Count > 0) SelectedRecord = RecordsList.First();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        public void AddRecords()
+        {
 
         }
     }
